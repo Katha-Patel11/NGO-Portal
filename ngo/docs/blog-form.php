@@ -1,0 +1,103 @@
+<?php 
+  session_start();
+   include "header.php";
+?> 
+<!-- Sidebar menu-->
+    <?php
+      include 'aside.php';
+    ?>
+    <?php
+      include 'connection.php';
+      if(isset($_POST['submit13']))
+      {
+          $title=$_POST['blog_title'];
+          $detail=mysqli_real_escape_string($conn,$_POST['blog_details']);
+          $date=$_POST['blog_date'];
+          $image=$_FILES['blog_image']['name'];
+          $path=$_FILES['blog_image']['tmp_name'];
+          $ngoid=$_SESSION['ngo_id'];
+          $sql="insert into tbl_blog (blog_title,blog_details,blog_date,blog_image,ngo_id) values('$title','$detail','$date','$image','$ngoid')";
+          if(mysqli_query($conn,$sql))
+          {
+            move_uploaded_file($path,"../../admin/docs/blog-uploads/".$image);
+            echo "<script>window.location='blog-table.php';</script>";
+          }
+          else
+          {
+              echo "Problem".mysqli_error($conn);
+          }
+      }
+    ?>
+    <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-edit"></i>Blog Form</h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item">Forms</li>
+          <li class="breadcrumb-item"><a href="#">Blog Form</a></li>
+        </ul>
+      </div>
+        <div class="col-md-6" style="text-align:left;">
+          <div class="tile">
+            <h3 class="tile-title">Blog Details</h3>
+            <div class="tile-body">
+              <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                <div class="form-group row">
+                  <label class="control-label col-md-3">Blog Title</label>
+                  <div class="col-md-8">
+                    <input class="form-control" type="text" placeholder="Enter title" name="blog_title" required>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="control-label col-md-3">Details</label>
+                  <div class="col-md-8">
+                    <textarea class="form-control" placeholder="Details" rows="5" cols="40" name="blog_details"></textarea>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="control-label col-md-3">Date</label>
+                  <div class="col-md-8">
+                    <input class="form-control" type="date" placeholder="Enter date" name="blog_date">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="control-label col-md-3">Blog image</label>
+                  <div class="col-md-8">
+                    <input class="form-control" type="file" placeholder="Choose File" name="blog_image" required>
+                  </div>
+                </div>
+                
+                <!--<div class="form-group row">
+                  <label class="control-label col-md-3">Identity Proof</label>
+                  <div class="col-md-8">
+                    <input class="form-control" type="file">
+                  </div>
+                </div>-->
+            </div>
+            <div class="tile-footer">
+              <div class="row">
+                <div class="col-md-8 col-md-offset-3">
+                  <input type="submit" value="Submit" name="submit13" class="btn btn-primary" >&nbsp;&nbsp;&nbsp;<input type="reset" name="reset" value="Cancel" class="btn btn-secondary" href="#">
+                </div>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Essential javascripts for application to work-->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="js/plugins/pace.min.js"></script>
+    <!-- Page specific javascripts-->
+    <?php 
+        include "script.php";
+    ?>
+  </body>
+</html>
